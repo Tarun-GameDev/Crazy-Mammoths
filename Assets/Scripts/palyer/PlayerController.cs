@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class PlayerController : Mammoth
 {
-
-    void Update()
+    private void Start()
     {
-        move();
+        startAssign();
+    }
+
+    private void Update()
+    {
+        if (gameOver)
+            return;
+
         if(Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
+
     }
+
+    private void FixedUpdate()
+    {
+        if (gameOver)
+            return;
+        move();
+    }
+
 }

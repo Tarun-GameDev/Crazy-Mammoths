@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class EnemyController : Mammoth
 {
-    void Update()
+    private void Start()
     {
-        move();
+        startAssign();
+    }
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Jump();
-        }
+    private void Update()
+    {
+        if (gameOver)
+            return;
 
         int rand = Random.Range(0, 20);
 
         if (rand == 5)
+        {
             Jump();
+        }
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (gameOver)
+            return;
+        move();
     }
 }

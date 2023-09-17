@@ -4,33 +4,36 @@ using UnityEngine;
 
 public class Mammoth:MonoBehaviour
 {
-    public float moveSpeed = 100f;
-    [SerializeField] float jumpSpeed = 3800f;
+    public float moveSpeed;
+    public float jumpSpeed;
     public float raycastDistance = 0.51f;
 
     public Rigidbody rb;
     
     LevelManager levelManager;
+    public bool gameOver = false;
 
-    private void Start()
+    public void startAssign()
     {
-        rb = GetComponent<Rigidbody>(); 
-        
+        rb = GetComponent<Rigidbody>();
+
         levelManager = LevelManager.instance;
 
         if (levelManager != null)
             levelManager.mammoths.Add(this);
+        gameOver = false;
+    }
+    public void move()
+    {
+        rb.AddForce(moveSpeed * Vector3.right * Time.fixedDeltaTime, ForceMode.Force);
     }
 
-    public virtual void move()
+    public void Jump()
     {
-        rb.AddForce(moveSpeed * Time.fixedDeltaTime * Vector3.right,ForceMode.Force);
-    }
-
-    public virtual void Jump()
-    {
-        if(CheckGround() == true)
-            rb.AddForce(jumpSpeed * Time.fixedDeltaTime * Vector3.up,ForceMode.VelocityChange);
+        if (CheckGround() == true)
+        {
+            rb.AddForce(jumpSpeed * Vector3.up * Time.deltaTime, ForceMode.VelocityChange);
+        }
     }
 
     public bool CheckGround()

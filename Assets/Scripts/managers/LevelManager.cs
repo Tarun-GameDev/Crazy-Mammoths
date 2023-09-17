@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     public List<Mammoth> mammoths = new List<Mammoth>();
+    [SerializeField] float currentSpeed = 3000f;
     public float increaseAmount = 400f;
 
 
@@ -15,7 +16,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] bool isRotating = false;
     [SerializeField] Vector3 rotate;
 
-    [SerializeField] float currentSpeed = 3000f;
+
+    bool maxed = false;
+    public bool levelCompleted = false;
 
     private void Awake()
     {
@@ -27,11 +30,15 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        maxed = false;
         rotate = targetRotation.localEulerAngles;
+        StartCoroutine(ChangeSpeedCoro());
     }
 
     public void Update()
     {
+
+
         if (Input.GetKeyDown(KeyCode.I))
         {
             SetSpeed(increaseAmount);
@@ -57,9 +64,23 @@ public class LevelManager : MonoBehaviour
 
     public void SetSpeed(float _newspeed)
     {
+        currentSpeed = currentSpeed + _newspeed;
         foreach (Mammoth _mammoth in mammoths)
         {
-            _mammoth.moveSpeed = currentSpeed + _newspeed;
+            _mammoth.moveSpeed = currentSpeed;
+        }
+    }
+
+    public void GameOver()
+    {
+        rotate = new Vector3(0f, 0f, 0f);
+        isRotating = true;
+
+        //setting the speed to 0
+        foreach (Mammoth _mammoth in mammoths)
+        {
+            _mammoth.moveSpeed = 0f;
+            _mammoth.gameOver = true;
         }
     }
 
@@ -67,5 +88,28 @@ public class LevelManager : MonoBehaviour
     {
         rotate = new Vector3(0f, 0f, rotate.z + _rotation);
         isRotating = true;
+    }
+
+    IEnumerator ChangeSpeedCoro()
+    {
+        yield return new WaitForSeconds(Random.Range(10f, 15f));
+
+        if (levelCompleted)
+            yield return null;
+
+        if(maxed)
+        {
+            SetRotation(-20);
+            SetSpeed(-increaseAmount);
+            maxed = false;
+        }
+        else
+        {
+            SetSpeed(increaseAmount);
+            SetRotation(20);
+            maxed = true;
+        }
+
+        StartCoroutine(ChangeSpeedCoro());
     }
 }

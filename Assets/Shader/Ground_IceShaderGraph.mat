@@ -50,7 +50,7 @@ Material:
     m_Colors:
     - _Color: {r: 0, g: 0.8784314, b: 1.4039216, a: 1}
     - _FresnelColor: {r: 0.5949225, g: 0.5949225, b: 0.5949225, a: 0}
-    - _Ice_Texture_Offset: {r: 50, g: 50, b: 0, a: 0}
+    - _Ice_Texture_Offset: {r: 10, g: 10000, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8722059620938884751
 MonoBehaviour:
